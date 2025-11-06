@@ -21,12 +21,12 @@ substitutions:
   board_chip: "ESP32-S3"
   board_name: "Atom S3 Lite"
   # Interfaces GPIOs
-  # uart_esp_1 (Base port)
-  tx_pin_1: '6'
-  rx_pin_1: '5'
-  # uart_esp_2 (Grove Port)
-  tx_pin_2: '1'
-  rx_pin_2: '2'
+  # uart_esp_1 (Grove port RS485 Dongle)
+  tx_pin_1: '1'
+  rx_pin_1: '2'
+  # uart_esp_2 (Atomic RS485 Base)
+  tx_pin_2: '6'
+  rx_pin_2: '5'
   # uart_esp_3
   tx_pin_3: '38'
   rx_pin_3: '39'
