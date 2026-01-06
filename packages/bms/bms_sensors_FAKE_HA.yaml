@@ -1,0 +1,367 @@
+# bms_combine_FAKE_HA.yaml
+# Purpose: FAKE BMS values sourced from Home Assistant entities (stable + sanitized)
+packages:
+bms_temperature_sensor: !include bms_temperature_sensor_4.yaml
+sensor:
+  # ---------------------------------------------------------------------------
+  # Section A: RAW Home Assistant entity imports (internal)
+  # ---------------------------------------------------------------------------
+  - platform: homeassistant
+    id: ha_bms${bms_id}_battery_capacity
+    entity_id: ${ha_bms_battery_capacity}
+    internal: true
+
+  - platform: homeassistant
+    id: ha_bms${bms_id}_battery_capacity_remaining
+    entity_id: ${ha_bms_battery_capacity_remaining}
+    internal: true
+
+  - platform: homeassistant
+    id: ha_bms${bms_id}_voltage
+    entity_id: ${ha_bms_voltage}
+    internal: true
+
+  - platform: homeassistant
+    id: ha_bms${bms_id}_current
+    entity_id: ${ha_bms_current}
+    internal: true
+
+  - platform: homeassistant
+    id: ha_bms${bms_id}_power
+    entity_id: ${ha_bms_power}
+    internal: true
+
+  - platform: homeassistant
+    id: ha_bms${bms_id}_soc
+    entity_id: ${ha_bms_soc}
+    internal: true
+
+  - platform: homeassistant
+    id: ha_bms${bms_id}_soh
+    entity_id: ${ha_bms_soh}
+    internal: true
+
+  - platform: homeassistant
+    id: ha_bms${bms_id}_min_cell_voltage
+    entity_id: ${ha_bms_min_cell_voltage}
+    internal: true
+
+  - platform: homeassistant
+    id: ha_bms${bms_id}_min_voltage_cell
+    entity_id: ${ha_bms_min_voltage_cell}
+    internal: true
+
+  - platform: homeassistant
+    id: ha_bms${bms_id}_max_cell_voltage
+    entity_id: ${ha_bms_max_cell_voltage}
+    internal: true
+
+  - platform: homeassistant
+    id: ha_bms${bms_id}_max_voltage_cell
+    entity_id: ${ha_bms_max_voltage_cell}
+    internal: true
+
+  - platform: homeassistant
+    id: ha_bms${bms_id}_temp1
+    entity_id: ${ha_bms_temperature_sensor_1}
+    internal: true
+
+  - platform: homeassistant
+    id: ha_bms${bms_id}_temp2
+    entity_id: ${ha_bms_temperature_sensor_2}
+    internal: true
+
+  - platform: homeassistant
+    id: ha_bms${bms_id}_temp3
+    entity_id: ${ha_bms_temperature_sensor_3}
+    internal: true
+
+  - platform: homeassistant
+    id: ha_bms${bms_id}_temp4
+    entity_id: ${ha_bms_temperature_sensor_4}
+    internal: true
+
+  # ---------------------------------------------------------------------------
+  # Section B: Sanitized “sane” sensors (internal)
+  # ---------------------------------------------------------------------------
+  - platform: template
+    id: sane_bms${bms_id}_battery_capacity
+    internal: true
+    update_interval: ${bms_update_interval}
+    lambda: |-
+      float v = id(ha_bms${bms_id}_battery_capacity).state;
+      if (isnan(v) || v < 0) return 0.0f;
+      return v;
+
+  - platform: template
+    id: sane_bms${bms_id}_battery_capacity_remaining
+    internal: true
+    update_interval: ${bms_update_interval}
+    lambda: |-
+      float v = id(ha_bms${bms_id}_battery_capacity_remaining).state;
+      if (isnan(v) || v < 0) return 0.0f;
+      return v;
+
+  - platform: template
+    id: sane_bms${bms_id}_voltage
+    internal: true
+    update_interval: ${bms_update_interval}
+    lambda: |-
+      float v = id(ha_bms${bms_id}_voltage).state;
+      if (isnan(v) || v < 0) return 0.0f;
+      return v;
+
+  - platform: template
+    id: sane_bms${bms_id}_current
+    internal: true
+    update_interval: ${bms_update_interval}
+    lambda: |-
+      float v = id(ha_bms${bms_id}_current).state;
+      if (isnan(v)) return 0.0f;
+      return v;
+
+  - platform: template
+    id: sane_bms${bms_id}_power
+    internal: true
+    update_interval: ${bms_update_interval}
+    lambda: |-
+      float v = id(ha_bms${bms_id}_power).state;
+      if (isnan(v)) return 0.0f;
+      return v;
+
+  - platform: template
+    id: sane_bms${bms_id}_soc
+    internal: true
+    update_interval: ${bms_update_interval}
+    lambda: |-
+      float v = id(ha_bms${bms_id}_soc).state;
+      if (isnan(v)) return 0.0f;
+      if (v < 0) return 0.0f;
+      if (v > 100) return 100.0f;
+      return v;
+
+  - platform: template
+    id: sane_bms${bms_id}_soh
+    internal: true
+    update_interval: ${bms_update_interval}
+    lambda: |-
+      float v = id(ha_bms${bms_id}_soh).state;
+      if (isnan(v)) return 0.0f;
+      if (v < 0) return 0.0f;
+      if (v > 100) return 100.0f;
+      return v;
+
+  - platform: template
+    id: sane_bms${bms_id}_min_cell_voltage
+    internal: true
+    update_interval: ${bms_update_interval}
+    lambda: |-
+      float v = id(ha_bms${bms_id}_min_cell_voltage).state;
+      if (isnan(v) || v <= 0) return 0.0f;
+      return v;
+
+  - platform: template
+    id: sane_bms${bms_id}_max_cell_voltage
+    internal: true
+    update_interval: ${bms_update_interval}
+    lambda: |-
+      float v = id(ha_bms${bms_id}_max_cell_voltage).state;
+      if (isnan(v) || v <= 0) return 0.0f;
+      return v;
+
+  - platform: template
+    id: sane_bms${bms_id}_min_voltage_cell
+    internal: true
+    update_interval: ${bms_update_interval}
+    lambda: |-
+      float v = id(ha_bms${bms_id}_min_voltage_cell).state;
+      if (isnan(v)) return 1.0f;
+      int idx = (int) v;
+      if (idx < 1) idx = 1;
+      if (idx > 16) idx = 16;
+      return (float) idx;
+
+  - platform: template
+    id: sane_bms${bms_id}_max_voltage_cell
+    internal: true
+    update_interval: ${bms_update_interval}
+    lambda: |-
+      float v = id(ha_bms${bms_id}_max_voltage_cell).state;
+      if (isnan(v)) return 1.0f;
+      int idx = (int) v;
+      if (idx < 1) idx = 1;
+      if (idx > 16) idx = 16;
+      return (float) idx;
+
+  - platform: template
+    id: sane_bms${bms_id}_temp1
+    internal: true
+    update_interval: ${bms_update_interval}
+    lambda: |-
+      float v = id(ha_bms${bms_id}_temp1).state;
+      if (isnan(v)) return 0.0f;
+      return v;
+
+  - platform: template
+    id: sane_bms${bms_id}_temp2
+    internal: true
+    update_interval: ${bms_update_interval}
+    lambda: |-
+      float v = id(ha_bms${bms_id}_temp2).state;
+      if (isnan(v)) return 0.0f;
+      return v;
+
+  - platform: template
+    id: sane_bms${bms_id}_temp3
+    internal: true
+    update_interval: ${bms_update_interval}
+    lambda: |-
+      float v = id(ha_bms${bms_id}_temp3).state;
+      if (isnan(v)) return 0.0f;
+      return v;
+
+  - platform: template
+    id: sane_bms${bms_id}_temp4
+    internal: true
+    update_interval: ${bms_update_interval}
+    lambda: |-
+      float v = id(ha_bms${bms_id}_temp4).state;
+      if (isnan(v)) return 0.0f;
+      return v;
+
+  # ---------------------------------------------------------------------------
+  # Existing YamBMS FAKE exports (unchanged pattern), but now they return sane_*
+  # ---------------------------------------------------------------------------
+
+  - platform: template
+    id: bms${bms_id}_battery_capacity
+    name: "${name} ${bms_name} Battery Capacity"
+    update_interval: ${bms_update_interval}
+    accuracy_decimals: 0
+    unit_of_measurement: Ah
+    icon: mdi:car-battery
+    lambda: return id(sane_bms${bms_id}_battery_capacity).state;
+
+  - platform: template
+    id: bms${bms_id}_capacity_remaining_ah
+    name: "${name} ${bms_name} Capacity Remaining"
+    update_interval: ${bms_update_interval}
+    accuracy_decimals: 0
+    unit_of_measurement: Ah
+    icon: mdi:car-battery
+    lambda: return id(sane_bms${bms_id}_battery_capacity_remaining).state;
+
+  - platform: template
+    id: bms${bms_id}_total_voltage
+    name: "${name} ${bms_name} Total Voltage"
+    update_interval: ${bms_update_interval}
+    accuracy_decimals: 2
+    unit_of_measurement: V
+    device_class: voltage
+    lambda: return id(sane_bms${bms_id}_voltage).state;
+
+  - platform: template
+    id: bms${bms_id}_current
+    name: "${name} ${bms_name} Current"
+    update_interval: ${bms_update_interval}
+    accuracy_decimals: 1
+    unit_of_measurement: A
+    device_class: current
+    lambda: return id(sane_bms${bms_id}_current).state;
+
+  - platform: template
+    id: bms${bms_id}_power
+    name: "${name} ${bms_name} Power"
+    update_interval: ${bms_update_interval}
+    accuracy_decimals: 0
+    unit_of_measurement: W
+    device_class: power
+    lambda: return id(sane_bms${bms_id}_power).state;
+
+  - platform: template
+    id: bms${bms_id}_battery_soc
+    name: "${name} ${bms_name} Battery SoC"
+    update_interval: ${bms_update_interval}
+    accuracy_decimals: 0
+    unit_of_measurement: '%'
+    device_class: battery
+    lambda: return id(sane_bms${bms_id}_soc).state;
+
+  - platform: template
+    id: bms${bms_id}_battery_soh
+    name: "${name} ${bms_name} Battery SoH"
+    update_interval: ${bms_update_interval}
+    accuracy_decimals: 0
+    unit_of_measurement: '%'
+    device_class: battery
+    lambda: return id(sane_bms${bms_id}_soh).state;
+
+  - platform: template
+    id: bms${bms_id}_min_voltage_cell
+    name: "${name} ${bms_name} Min Voltage Cell"
+    update_interval: ${bms_update_interval}
+    accuracy_decimals: 0
+    icon: mdi:numeric
+    lambda: return id(sane_bms${bms_id}_min_voltage_cell).state;
+
+  - platform: template
+    id: bms${bms_id}_max_voltage_cell
+    name: "${name} ${bms_name} Max Voltage Cell"
+    update_interval: ${bms_update_interval}
+    accuracy_decimals: 0
+    icon: mdi:numeric
+    lambda: return id(sane_bms${bms_id}_max_voltage_cell).state;
+
+  - platform: template
+    id: bms${bms_id}_min_cell_voltage
+    name: "${name} ${bms_name} Min Cell Voltage"
+    update_interval: ${bms_update_interval}
+    accuracy_decimals: 3
+    unit_of_measurement: V
+    device_class: voltage
+    lambda: return id(sane_bms${bms_id}_min_cell_voltage).state;
+
+  - platform: template
+    id: bms${bms_id}_max_cell_voltage
+    name: "${name} ${bms_name} Max Cell Voltage"
+    update_interval: ${bms_update_interval}
+    accuracy_decimals: 3
+    unit_of_measurement: V
+    device_class: voltage
+    lambda: return id(sane_bms${bms_id}_max_cell_voltage).state;
+
+  - platform: template
+    id: bms${bms_id}_temperature_sensor_1
+    name: "${name} ${bms_name} Temperature Sensor 1"
+    update_interval: ${bms_update_interval}
+    accuracy_decimals: 1
+    unit_of_measurement: °C
+    device_class: temperature
+    lambda: return id(sane_bms${bms_id}_temp1).state;
+
+  - platform: template
+    id: bms${bms_id}_temperature_sensor_2
+    name: "${name} ${bms_name} Temperature Sensor 2"
+    update_interval: ${bms_update_interval}
+    accuracy_decimals: 1
+    unit_of_measurement: °C
+    device_class: temperature
+    lambda: return id(sane_bms${bms_id}_temp2).state;
+
+  - platform: template
+    id: bms${bms_id}_temperature_sensor_3
+    name: "${name} ${bms_name} Temperature Sensor 3"
+    update_interval: ${bms_update_interval}
+    accuracy_decimals: 1
+    unit_of_measurement: °C
+    device_class: temperature
+    lambda: return id(sane_bms${bms_id}_temp3).state;
+
+  - platform: template
+    id: bms${bms_id}_temperature_sensor_4
+    name: "${name} ${bms_name} Temperature Sensor 4"
+    update_interval: ${bms_update_interval}
+    accuracy_decimals: 1
+    unit_of_measurement: °C
+    device_class: temperature
+    lambda: return id(sane_bms${bms_id}_temp4).state;
