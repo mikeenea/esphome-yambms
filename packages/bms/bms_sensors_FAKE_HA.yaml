@@ -1,7 +1,7 @@
 # bms_combine_FAKE_HA.yaml
 # Purpose: FAKE BMS values sourced from Home Assistant entities (stable + sanitized)
-packages:
-bms_temperature_sensor: !include bms_temperature_sensor_4.yaml
+#packages:
+#bms_temperature_sensor: !include bms_temperature_sensor_4.yaml
 sensor:
   # ---------------------------------------------------------------------------
   # Section A: RAW Home Assistant entity imports (internal)
@@ -365,3 +365,4 @@ sensor:
     unit_of_measurement: °C
     device_class: temperature
     lambda: return id(sane_bms${bms_id}_temp4).state;
+
