@@ -29,7 +29,7 @@ external_components:
   - source: github://easybotics/esphome-ruixu-bms@main
     refresh: 0s
 
-ruixu_bms:
+seplos_bms:
   - id: seplos_bms${bms_id}
     address: ${bms_address}
     protocol_version: ${bms_protocol_version}
