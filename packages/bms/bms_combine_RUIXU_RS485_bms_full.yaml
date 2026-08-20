@@ -1,0 +1,11 @@
+# Use this wrapper when the RUIXU battery is connected directly to the main
+# YamBMS combining node.
+
+substitutions:
+  bms_model: "RUIXU RS485"
+  bms_protocol: "RS485 0x21"
+
+packages:
+  bms_sensors: !include bms_sensors_RUIXU_RS485_bms_full.yaml
+  bms_combine: !include bms_combine.yaml
+

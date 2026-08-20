@@ -1,0 +1,22 @@
+# RUIXU RS485 parser shared by all batteries on the physical RUIXU bus.
+# RUIXU uses the Seplos framing with protocol version 0x21.
+
+substitutions:
+  bms_model: "RUIXU"
+  bms_protocol: "RS485 0x21"
+  ruixu_modbus_id: modbus_ruixu
+  ruixu_modbus_rx_timeout: "150ms"
+
+external_components:
+  - source: github://mikeenea/esphome-ruixu-bms@main
+    refresh: 0s
+
+uart:
+  - id: !extend ${ruixu_modbus_uart_id}
+    baud_rate: ${ruixu_modbus_baud_rate}
+
+seplos_modbus:
+  id: ${ruixu_modbus_id}
+  uart_id: ${ruixu_modbus_uart_id}
+  rx_timeout: ${ruixu_modbus_rx_timeout}
+

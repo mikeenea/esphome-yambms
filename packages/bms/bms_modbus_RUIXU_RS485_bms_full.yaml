@@ -1,0 +1,10 @@
+# Use this wrapper on a remote YamBMS multi-node Modbus-server device.
+
+substitutions:
+  bms_model: "RUIXU RS485"
+  bms_protocol: "Multi-node"
+
+packages:
+  bms_sensors: !include bms_sensors_RUIXU_RS485_bms_full.yaml
+  bms_modbus_server: !include bms_modbus_server.yaml
+
