@@ -20,7 +20,6 @@ binary_sensor:
     id: bms${bms_id}_online_status
     device_id: bms_${bms_id}
     name: "online status"
-    update_interval: ${bms_update_interval}
     trigger_on_initial_state: true
     lambda: |-
       return id(bms${bms_id}_total_voltage).has_state() &&
