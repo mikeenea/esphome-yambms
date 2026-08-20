@@ -1,0 +1,217 @@
+# RUIXU 12-battery YamBMS multi-node Modbus server
+# Hardware: M5Stack AtomS3 + Atomic RS485 base + Grove RS485 unit
+#
+# RUIXU bus: Atomic RS485 base, uart_esp_3, TX GPIO6 / RX GPIO5
+# YamBMS bus: Grove RS485 unit, uart_esp_1, TX GPIO2 / RX GPIO1
+
+substitutions:
+  hostname: "ruixu-mbs"
+  friendly_name: "RUIXU MBS"
+  bms_update_interval: "6s"
+  enable_led_logging: "false"
+  enable_health_logging: "false"
+
+esphome:
+  name: ${hostname}
+  friendly_name: ${friendly_name}
+  comment: "Twelve RUIXU batteries exposed to YamBMS Modbus and ESPHome API"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  manual_ip:
+    static_ip: 192.168.0.13
+    gateway: 192.168.0.1
+    subnet: 255.255.255.0
+
+logger:
+  level: INFO
+  baud_rate: 0
+  hardware_uart: USB_SERIAL_JTAG
+
+api:
+  reboot_timeout: 0s
+
+ota:
+  - platform: esphome
+
+packages:
+  remote_packages:
+    # This must point to the YamBMS fork containing the new RUIXU package files.
+    url: https://github.com/mikeenea/esphome-yambms
+    ref: main
+    refresh: 60min
+    files:
+      - path: "packages/board/board_ESP32-S3_AtomS3.yaml"
+
+      # Grove RS485 unit: outbound YamBMS multi-node network.
+      - path: "packages/board/board_options_itf_uart_esp_1.yaml"
+
+      # Atomic RS485 base: inbound RUIXU battery network.
+      - path: "packages/board/board_options_itf_uart_esp_3.yaml"
+
+      - path: "packages/board/board_options_itf_modbus.yaml"
+        vars:
+          modbus_role: "server"
+          modbus_uart_id: "uart_esp_1"
+          modbus_baud_rate: "19200"
+          modbus_id: "1"
+
+      - path: "packages/bms/bms_combine_RUIXU_RS485_modbus.yaml"
+        vars:
+          ruixu_modbus_uart_id: "uart_esp_3"
+          ruixu_modbus_baud_rate: "9600"
+          ruixu_modbus_rx_timeout: "150ms"
+
+      # RUIXU master: physical address 0x00; YamBMS server address 1.
+      - path: "packages/bms/bms_modbus_RUIXU_RS485_bms_full.yaml"
+        vars:
+          bms_id: "1"
+          bms_name: "RUIXU Battery 1"
+          bms_address: "0x00"
+          bms_max_charge_current: "100"
+          bms_max_discharge_current: "100"
+          bms_cell_ovp: "3.650"
+          bms_cell_uvp: "2.800"
+          bms_balance_trigger_voltage: "3.400"
+          bms_status_led_id: "esp_light"
+
+      - path: "packages/bms/bms_modbus_RUIXU_RS485_bms_full.yaml"
+        vars:
+          bms_id: "2"
+          bms_name: "RUIXU Battery 2"
+          bms_address: "0x01"
+          bms_max_charge_current: "100"
+          bms_max_discharge_current: "100"
+          bms_cell_ovp: "3.650"
+          bms_cell_uvp: "2.800"
+          bms_balance_trigger_voltage: "3.400"
+          bms_status_led_id: "esp_light"
+
+      - path: "packages/bms/bms_modbus_RUIXU_RS485_bms_full.yaml"
+        vars:
+          bms_id: "3"
+          bms_name: "RUIXU Battery 3"
+          bms_address: "0x02"
+          bms_max_charge_current: "100"
+          bms_max_discharge_current: "100"
+          bms_cell_ovp: "3.650"
+          bms_cell_uvp: "2.800"
+          bms_balance_trigger_voltage: "3.400"
+          bms_status_led_id: "esp_light"
+
+      - path: "packages/bms/bms_modbus_RUIXU_RS485_bms_full.yaml"
+        vars:
+          bms_id: "4"
+          bms_name: "RUIXU Battery 4"
+          bms_address: "0x03"
+          bms_max_charge_current: "100"
+          bms_max_discharge_current: "100"
+          bms_cell_ovp: "3.650"
+          bms_cell_uvp: "2.800"
+          bms_balance_trigger_voltage: "3.400"
+          bms_status_led_id: "esp_light"
+
+      - path: "packages/bms/bms_modbus_RUIXU_RS485_bms_full.yaml"
+        vars:
+          bms_id: "5"
+          bms_name: "RUIXU Battery 5"
+          bms_address: "0x04"
+          bms_max_charge_current: "100"
+          bms_max_discharge_current: "100"
+          bms_cell_ovp: "3.650"
+          bms_cell_uvp: "2.800"
+          bms_balance_trigger_voltage: "3.400"
+          bms_status_led_id: "esp_light"
+
+      - path: "packages/bms/bms_modbus_RUIXU_RS485_bms_full.yaml"
+        vars:
+          bms_id: "6"
+          bms_name: "RUIXU Battery 6"
+          bms_address: "0x05"
+          bms_max_charge_current: "100"
+          bms_max_discharge_current: "100"
+          bms_cell_ovp: "3.650"
+          bms_cell_uvp: "2.800"
+          bms_balance_trigger_voltage: "3.400"
+          bms_status_led_id: "esp_light"
+
+      - path: "packages/bms/bms_modbus_RUIXU_RS485_bms_full.yaml"
+        vars:
+          bms_id: "7"
+          bms_name: "RUIXU Battery 7"
+          bms_address: "0x06"
+          bms_max_charge_current: "100"
+          bms_max_discharge_current: "100"
+          bms_cell_ovp: "3.650"
+          bms_cell_uvp: "2.800"
+          bms_balance_trigger_voltage: "3.400"
+          bms_status_led_id: "esp_light"
+
+      - path: "packages/bms/bms_modbus_RUIXU_RS485_bms_full.yaml"
+        vars:
+          bms_id: "8"
+          bms_name: "RUIXU Battery 8"
+          bms_address: "0x07"
+          bms_max_charge_current: "100"
+          bms_max_discharge_current: "100"
+          bms_cell_ovp: "3.650"
+          bms_cell_uvp: "2.800"
+          bms_balance_trigger_voltage: "3.400"
+          bms_status_led_id: "esp_light"
+
+      - path: "packages/bms/bms_modbus_RUIXU_RS485_bms_full.yaml"
+        vars:
+          bms_id: "9"
+          bms_name: "RUIXU Battery 9"
+          bms_address: "0x08"
+          bms_max_charge_current: "100"
+          bms_max_discharge_current: "100"
+          bms_cell_ovp: "3.650"
+          bms_cell_uvp: "2.800"
+          bms_balance_trigger_voltage: "3.400"
+          bms_status_led_id: "esp_light"
+
+      - path: "packages/bms/bms_modbus_RUIXU_RS485_bms_full.yaml"
+        vars:
+          bms_id: "10"
+          bms_name: "RUIXU Battery 10"
+          bms_address: "0x09"
+          bms_max_charge_current: "100"
+          bms_max_discharge_current: "100"
+          bms_cell_ovp: "3.650"
+          bms_cell_uvp: "2.800"
+          bms_balance_trigger_voltage: "3.400"
+          bms_status_led_id: "esp_light"
+
+      # RUIXU uses BCD-style physical address 0x10 after 0x09.
+      - path: "packages/bms/bms_modbus_RUIXU_RS485_bms_full.yaml"
+        vars:
+          bms_id: "11"
+          bms_name: "RUIXU Battery 11"
+          bms_address: "0x10"
+          bms_max_charge_current: "100"
+          bms_max_discharge_current: "100"
+          bms_cell_ovp: "3.650"
+          bms_cell_uvp: "2.800"
+          bms_balance_trigger_voltage: "3.400"
+          bms_status_led_id: "esp_light"
+
+      - path: "packages/bms/bms_modbus_RUIXU_RS485_bms_full.yaml"
+        vars:
+          bms_id: "12"
+          bms_name: "RUIXU Battery 12"
+          bms_address: "0x11"
+          bms_max_charge_current: "100"
+          bms_max_discharge_current: "100"
+          bms_cell_ovp: "3.650"
+          bms_cell_uvp: "2.800"
+          bms_balance_trigger_voltage: "3.400"
+          bms_status_led_id: "esp_light"
+
+      - path: "packages/base/device_debug_ESP32.yaml"
+        vars:
+          debug_name: "Debug"
+          debug_update_interval: "5s"
+          debug_psram_size: "0"
+

@@ -1,0 +1,52 @@
+# Copy these entries into the remote_packages files list on the central
+# YamBMS Modbus-client node. The IDs must match the RUIXU server node exactly.
+
+- path: "packages/bms/bms_combine_modbus_client.yaml"
+  vars:
+    bms_id: "1"
+    bms_name: "RUIXU Battery 1"
+- path: "packages/bms/bms_combine_modbus_client.yaml"
+  vars:
+    bms_id: "2"
+    bms_name: "RUIXU Battery 2"
+- path: "packages/bms/bms_combine_modbus_client.yaml"
+  vars:
+    bms_id: "3"
+    bms_name: "RUIXU Battery 3"
+- path: "packages/bms/bms_combine_modbus_client.yaml"
+  vars:
+    bms_id: "4"
+    bms_name: "RUIXU Battery 4"
+- path: "packages/bms/bms_combine_modbus_client.yaml"
+  vars:
+    bms_id: "5"
+    bms_name: "RUIXU Battery 5"
+- path: "packages/bms/bms_combine_modbus_client.yaml"
+  vars:
+    bms_id: "6"
+    bms_name: "RUIXU Battery 6"
+- path: "packages/bms/bms_combine_modbus_client.yaml"
+  vars:
+    bms_id: "7"
+    bms_name: "RUIXU Battery 7"
+- path: "packages/bms/bms_combine_modbus_client.yaml"
+  vars:
+    bms_id: "8"
+    bms_name: "RUIXU Battery 8"
+- path: "packages/bms/bms_combine_modbus_client.yaml"
+  vars:
+    bms_id: "9"
+    bms_name: "RUIXU Battery 9"
+- path: "packages/bms/bms_combine_modbus_client.yaml"
+  vars:
+    bms_id: "10"
+    bms_name: "RUIXU Battery 10"
+- path: "packages/bms/bms_combine_modbus_client.yaml"
+  vars:
+    bms_id: "11"
+    bms_name: "RUIXU Battery 11"
+- path: "packages/bms/bms_combine_modbus_client.yaml"
+  vars:
+    bms_id: "12"
+    bms_name: "RUIXU Battery 12"
+
